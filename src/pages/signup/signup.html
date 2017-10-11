@@ -1,0 +1,47 @@
+<!--
+  Generated template for the SignupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>signup</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <form #FormSignup="ngForm" (ngSubmit)="login(FormSignup)">
+    <ion-item>
+      <ion-label floating>first_name</ion-label>
+      <ion-input [(ngModel)]="FormSignup.first_name" name="first_name" type="text" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>last_name</ion-label>
+      <ion-input [(ngModel)]="FormSignup.last_name" name="last_name" type="text" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>email</ion-label>
+      <ion-input [(ngModel)]="FormSignup.email" name="email" type="text" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>age</ion-label>
+      <ion-input [(ngModel)]="FormSignup.age" name="age" type="text" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>password</ion-label>
+      <ion-input [(ngModel)]="FormSignup.password" name="password" type="password" required></ion-input>
+    </ion-item>
+     <ion-item>
+      <ion-label floating>password_confirmation</ion-label>
+      <ion-input [(ngModel)]="FormSignup.password_confirmation" name="password_confirmation" type="password" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <button [disabled]="!FormSignup.form.valid" type="submit" full ion-button>Signup</button>
+    </ion-item>
+  </form>
+</ion-content>
+
