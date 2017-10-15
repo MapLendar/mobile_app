@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController } from 'ionic-angular';
 import * as moment from 'moment';
+import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+import {AuthProvider} from '../../providers/auth/auth';
+
 
 @Component({
   selector: 'calendar-home',
@@ -12,12 +17,20 @@ export class CalendarHomePage {
   selectedDay = new Date();
   selectedSite: string;
 
+  user: Observable<any>;
+  events: Observable<any>;
+
   calendar = {
     mode: 'month',
     currentDate: new Date()
   };
 
-  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController) { }
+  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController, public authProvider: AuthProvider) {
+        this.user = this.authProvider.getUserInf();
+        this.user.map(res => res.json()).subscribe(data => {
+          console.log('my data: ', data);
+        });
+   }
 
   addEvent() {
     let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay, selectedSite: this.selectedSite});
@@ -66,5 +79,6 @@ export class CalendarHomePage {
   onSiteSelected(ev){
     this.selectedSite = ev.selectedSite;
   }
+
 
 }

@@ -10,7 +10,7 @@ import { LoginPage } from '../pages/login/login';
 
 import { AuthProvider } from '../providers/auth/auth';
 
-import { HttpModule } from '@angular/http'; 
+import { HttpModule } from '@angular/http';
 //agregadas desps
 import { WelcomePage } from '../pages/welcome/welcome';
 import { SignupPage } from '../pages/signup/signup';
@@ -28,6 +28,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { MailServiceProvider } from '../providers/mail-service/mail-service';
 
 import { NgCalendarModule } from 'ionic2-calendar';
+
 
 
 @NgModule({

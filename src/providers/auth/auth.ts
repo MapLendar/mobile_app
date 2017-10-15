@@ -15,14 +15,23 @@ import 'rxjs/add/operator/toPromise';
 */
 @Injectable()
 export class AuthProvider {
+
   getusertoken: Observable<any>;
+  user_inf: Observable<any>;
   baseUrl:string = 'http://localhost:3000/authenticate/'
   base2Url:string = 'http://localhost:3000/authorize/'
-  base3Url:string = 'http://localhost:3000/users/' 
+  base3Url:string = 'http://localhost:3000/users/'
   base4Url:string = ' http://localhost:3000/logout'
+
+
   constructor(public http: Http, public storage: Storage) {
     console.log('Hello AuthProvider Provider');
   }
+
+  getUserInf(){
+    return this.http.get('http://localhost:3000/user_inf').map(res => res.json());
+  }
+
   getTokenStorage(){
     return this.storage.get('jwtoken').then(val => {
       let autoken = val;
@@ -44,9 +53,9 @@ export class AuthProvider {
     return this.createAuthorizationHeader(headers).then(() =>{
       console.log("Entrando a hacer el get");
       return this.http.get(this.base2Url,{headers: headers})
-      .map(res => res.json()).toPromise(); 
+      .map(res => res.json()).toPromise();
     });
-    
+
   }
 
   login(data){
@@ -58,7 +67,7 @@ export class AuthProvider {
     return this.http.post(this.base3Url, data)
     .map(this.extractData2);
   }
-  
+
   isLogged(){
   	return this.storage.get('jwtoken').then(val => {
       //console.log("value");
@@ -77,7 +86,7 @@ export class AuthProvider {
    let headers = new Headers();
 
    return this.createAuthorizationHeader(headers).then(() =>{
-     
+
     this.storage.get('jwtoken').then((val) => {
         console.log('El token es: ', val);
       });
@@ -93,9 +102,9 @@ export class AuthProvider {
     return this.http.get(this.base4Url,{
       headers: headers
     }).map(res => res.json());
-    });  
+    });
 
-    
+
 
     //this.storage.remove('jwtoken');
     //window.localStorage.removeItem('auth_token');
@@ -129,13 +138,13 @@ export class AuthProvider {
       });
    return body || {};
 
- } 
+ }
 
   private extractData2(res: Response){
     let body = res.json();
     //window.localStorage.setItem('auth_token', body.auth_token);
    return body || {};
 
- } 
+ }
 
 }
