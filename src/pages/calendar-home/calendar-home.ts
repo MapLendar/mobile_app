@@ -7,20 +7,10 @@ import * as moment from 'moment';
   templateUrl: 'calendar-home.html'
 })
 export class CalendarHomePage {
-
   eventSource = [];
   viewTitle: string;
   selectedDay = new Date();
-
-  event_name: string;
-  description: string;
-  address: string;
-  phone: string;
-  latitude: number;
-  longitude: number;
-  owner_id: number
-  // "created_at": "2017-10-09T23:03:29.000Z",
-  // "updated_at": "2017-10-09T23:03:29.000Z"
+  selectedSite: string;
 
   calendar = {
     mode: 'month',
@@ -30,14 +20,15 @@ export class CalendarHomePage {
   constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController) { }
 
   addEvent() {
-
-    let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay});
+    let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay, selectedSite: this.selectedSite});
     modal.present();
     modal.onDidDismiss(data => {
       if (data) {
         let eventData = data;
+
         eventData.startTime = new Date(data.startTime);
         eventData.endTime = new Date(data.endTime);
+        eventData.selectedSite = data.selectedSite ;
 
         let events = this.eventSource;
         events.push(eventData);
@@ -53,13 +44,16 @@ export class CalendarHomePage {
     this.viewTitle = title;
   }
 
-  onEventSelected(event) {
+  onEventSelected(event, films) {
+
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
+    let place = event.site;
+
 
     let alert = this.alertCtrl.create({
       title: '' + event.title,
-      subTitle: 'From: ' + start + '<br>To: ' + end,
+      subTitle: '<b>From: </b>' + start + '<b><br>To:</b> ' + end +  '<b><br>Where: </b>' + place ,
       buttons: ['OK']
     })
     alert.present();
@@ -68,4 +62,9 @@ export class CalendarHomePage {
   onTimeSelected(ev) {
     this.selectedDay = ev.selectedTime;
   }
+
+  onSiteSelected(ev){
+    this.selectedSite = ev.selectedSite;
+  }
+
 }

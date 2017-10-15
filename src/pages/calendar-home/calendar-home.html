@@ -1,8 +1,5 @@
 <ion-header>
   <ion-navbar color="primary">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>
       {{ viewTitle }}
     </ion-title>
@@ -13,14 +10,15 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
- 
+
 <ion-content>
 <calendar [eventSource]="eventSource"
         [calendarMode]="calendar.mode"
         [currentDate]="calendar.currentDate"
-        (onEventSelected)="onEventSelected($event)"
+        (onEventSelected)="onEventSelected($event, $films)"
         (onTitleChanged)="onViewTitleChanged($event)"
         (onTimeSelected)="onTimeSelected($event)"
+        (onSiteSelected) = "onSiteSelected($event)"
         step="30"
         class="calendar">
       </calendar>
