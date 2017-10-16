@@ -61,7 +61,7 @@ export class EventModalPage {
 
 
     let postParams = {
-       id: this.event.site,
+
        name: this.event.title,
        description:this.event.description,
        site_id: find_site(this.event.site),
@@ -73,13 +73,13 @@ export class EventModalPage {
     }
 
     console.log("site_id", postParams.site_id),
-    this.http.post("http://localhost:3001/events", postParams, options)
+    this.http.post("http://localhost:8001/events", postParams, options)
     .subscribe(data => {
       console.log(data['_body']);
     }, error => {
       console.log(error);
     });
-    
+
     this.viewCtrl.dismiss(this.event);
   }
 

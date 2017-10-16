@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController } from 'ionic-angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
-import { Http } from '@angular/http';
+import { Http, RequestOptions,  Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {AuthProvider} from '../../providers/auth/auth';
 
@@ -26,7 +26,7 @@ export class CalendarHomePage {
     currentDate: new Date()
   };
 
-  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController, public authProvider: AuthProvider) {
+  constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController, public authProvider: AuthProvider, public http: Http) {
         /*this.Authorize();
 
         this.user = this.authProvider.getUserInf().then(data => {
@@ -96,7 +96,7 @@ export class CalendarHomePage {
   delete_event(event){
 
     let alert = this.alertCtrl.create({
-      title: 'Delete' + event.title + '?',
+      title: 'Delete: ' + event.title + '?',
 
       buttons: [{
         text: 'Yes, delete event!',
@@ -105,7 +105,7 @@ export class CalendarHomePage {
           var index = this.eventSource.indexOf(event);
           let partialsource = this.eventSource;
           this.eventSource = [];
-          
+
           if (index > -1) {
             partialsource.splice(index, 1);
             setTimeout(() => {
@@ -122,7 +122,22 @@ export class CalendarHomePage {
         }
       }]
     })
+
+
+
+    let headers = new Headers({ 'Content-Type': 'application/json',
+                                     'Accept': 'q=0.8;application/json;q=0.9' });
+    let options = new RequestOptions({ headers: headers });
+
+    this.http.delete("http://localhost:8001/events?="+ event.title, options)
+    .subscribe(data => {
+      console.log(data['_body']);
+    }, error => {
+      console.log(error);
+    });
+
     alert.present();
+
 
   }
 
