@@ -28,10 +28,12 @@ export class EventModalPage {
 
     let preselectedDate = moment(this.navParams.get('selectedDay')).format();
     let preselectedPlace = this.navParams.get('selectedSite')
+    let preselectedTitle = this.navParams.get('selectedTitle')
 
     this.event.startTime = preselectedDate;
     this.event.endTime = preselectedDate;
     this.event.site = preselectedPlace;
+    this.event.title = preselectedTitle;
 
   }
 

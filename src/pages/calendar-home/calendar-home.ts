@@ -68,6 +68,30 @@ export class CalendarHomePage {
            });
    }
 
+   edit_event(event) {
+     let modal = this.modalCtrl.create('EventModalPage', {selectedTitle: event.title, selectedDay: event.selectedDay, selectedSite: event.selectedSite});
+     this.delete_event(event, 0);
+     modal.present();
+     modal.onDidDismiss(data => {
+       if (data) {
+         let eventData = data;
+
+         eventData.startTime = new Date(data.startTime);
+         eventData.endTime = new Date(data.endTime);
+         eventData.selectedSite = data.selectedSite ;
+         eventData.selectedTitle = data.selectedTitle ;
+
+         let events = this.eventSource;
+         events.push(eventData);
+         this.eventSource = [];
+         setTimeout(() => {
+           this.eventSource = events;
+         });
+       }
+     });
+   }
+
+
   addEvent() {
     let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay, selectedSite: this.selectedSite});
     modal.present();
@@ -93,8 +117,34 @@ export class CalendarHomePage {
     this.viewTitle = title;
   }
 
-  delete_event(event){
+  delete_event(event, ins){
+    if (ins === 0){
 
+        var index = this.eventSource.indexOf(event);
+        let partialsource = this.eventSource;
+        this.eventSource = [];
+
+        if (index > -1) {
+          partialsource.splice(index, 1);
+          setTimeout(() => {
+            this.eventSource = partialsource;
+          });
+          console.log("Después", this.eventSource);
+        }
+
+        let headers = new Headers({ 'Content-Type': 'application/json',
+                                         'Accept': 'q=0.8;application/json;q=0.9' });
+        let options = new RequestOptions({ headers: headers });
+
+        this.http.delete("http://localhost:8001/events?name="+ event.title, options)
+        .subscribe(data => {
+          console.log(data['_body']);
+        }, error => {
+          console.log(error);
+        });
+   }
+
+    if (ins == 1){
     let alert = this.alertCtrl.create({
       title: 'Delete: ' + event.title + '?',
 
@@ -122,14 +172,11 @@ export class CalendarHomePage {
         }
       }]
     })
-
-
-
     let headers = new Headers({ 'Content-Type': 'application/json',
                                      'Accept': 'q=0.8;application/json;q=0.9' });
     let options = new RequestOptions({ headers: headers });
 
-    this.http.delete("http://localhost:8001/events?="+ event.title, options)
+    this.http.delete("http://localhost:8001/events?name="+ event.title, options)
     .subscribe(data => {
       console.log(data['_body']);
     }, error => {
@@ -137,9 +184,8 @@ export class CalendarHomePage {
     });
 
     alert.present();
-
-
-  }
+   }
+ }
 
   onEventSelected(event) {
 
@@ -152,14 +198,21 @@ export class CalendarHomePage {
       title: '' + event.title,
       subTitle: '<b>From: </b>' + start + '<b><br>To:</b> ' + end +  '<b><br>Where: </b>' + place ,
       buttons: [{
-        text: 'Delete event',
+        text: 'Edit event',
         handler: () => {
           console.log("antes  "+ this.eventSource);
-          this.delete_event(event);
+          this.edit_event(event);
         }
       },
       {
-        text: 'OK',
+        text: 'Delete event',
+        handler: () => {
+          console.log("antes  "+ this.eventSource);
+          this.delete_event(event, 1);
+        }
+      },
+      {
+        text: 'Ok',
         handler: () => {
           console.log('ok');
         }
