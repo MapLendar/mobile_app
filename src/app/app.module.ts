@@ -28,6 +28,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { MailServiceProvider } from '../providers/mail-service/mail-service';
 
 import { NgCalendarModule } from 'ionic2-calendar';
+import {EditPage} from '../pages/edit/edit';
 
 
 
@@ -42,7 +43,8 @@ import { NgCalendarModule } from 'ionic2-calendar';
     ContactPage,
     TabsPage,
     OtherPage,
-    CalendarHomePage
+    CalendarHomePage,
+
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,8 @@ import { NgCalendarModule } from 'ionic2-calendar';
     ContactPage,
     OtherPage,
     TabsPage,
-    CalendarHomePage
+    CalendarHomePage,
+
   ],
   providers: [
     StatusBar,
@@ -70,7 +73,9 @@ import { NgCalendarModule } from 'ionic2-calendar';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
     MailServiceProvider,
-    Geolocation
+    Geolocation,
+    CalendarHomePage,
+    
   ]
 })
 export class AppModule {}

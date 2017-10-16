@@ -7,19 +7,22 @@ import 'rxjs/add/operator/map';
 import {AuthProvider} from '../../providers/auth/auth';
 
 
+
 @Component({
   selector: 'calendar-home',
   templateUrl: 'calendar-home.html'
 })
 export class CalendarHomePage {
+
   eventSource = [];
   viewTitle: string;
   selectedDay = new Date();
   selectedSite: string;
   newtoken: any  =  "";
 
+
   user: any;
-  events: any;
+  event: any;
 
   calendar = {
     mode: 'month',
@@ -69,10 +72,23 @@ export class CalendarHomePage {
    }
 
    edit_event(event) {
-     let modal = this.modalCtrl.create('EventModalPage', {selectedTitle: event.title, selectedDay: event.selectedDay, selectedSite: event.selectedSite});
-     this.delete_event(event, 0);
+     let modal = this.modalCtrl.create('EditPage', { selectedTitle: event.title, selectedDay: event.selectedDay, selectedSite: event.selectedSite});
+
      modal.present();
      modal.onDidDismiss(data => {
+
+       var index = this.eventSource.indexOf(event.title);
+       let partialsource = this.eventSource;
+       this.eventSource = [];
+
+       if (index > -1) {
+         partialsource.splice(index, 1);
+         setTimeout(() => {
+           this.eventSource = partialsource;
+         });
+       }
+
+
        if (data) {
          let eventData = data;
 
@@ -89,6 +105,7 @@ export class CalendarHomePage {
          });
        }
      });
+
    }
 
 
@@ -202,6 +219,7 @@ export class CalendarHomePage {
         handler: () => {
           console.log("antes  "+ this.eventSource);
           this.edit_event(event);
+
         }
       },
       {

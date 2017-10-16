@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams,ViewController} from 'ionic-angular
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { Http, RequestOptions, Headers } from '@angular/http';
+import {CalendarHomePage} from '../calendar-home/calendar-home';
 
 
 /**
@@ -14,14 +15,13 @@ import { Http, RequestOptions, Headers } from '@angular/http';
 
 @IonicPage()
 @Component({
-  selector: 'page-event-modal',
-  templateUrl: 'event-modal.html',
+  selector: 'page-edit',
+  templateUrl: 'edit.html',
 })
-export class EventModalPage {
-
-  event = {title: "", description: "", startTime: new Date().toISOString(), endTime: new Date().toISOString(), allDay: false , site: -2, owner_id: 0};
+export class EditPage{
+  old: any ;
+  event = { title: "", description: "", startTime: new Date().toISOString(), endTime: new Date().toISOString(), allDay: false , site: -1, owner_id: 0};
   minDate = new Date().toISOString();
-  old: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public http: Http) {
 
@@ -33,6 +33,18 @@ export class EventModalPage {
     this.event.endTime = preselectedDate;
     this.event.site = preselectedPlace;
     this.event.title = preselectedTitle;
+    this.old = preselectedTitle;
+
+
+    function site_find(preselectedPlace){
+      let places = ["Leon de Greiff", "Virginia Gutierrrez", "Ciencias Humanas",
+            "Biblioteca central", "Enfermería", "CyT", "Sociología", "Derecho",
+          "Ingeniería","Medicina"];
+      return "" + places[preselectedPlace -1];
+
+    }
+
+
 
   }
 
@@ -40,16 +52,27 @@ export class EventModalPage {
     console.log('ionViewDidLoad EventModalPage');
   }
 
-
-
   save() {
 
 
 
-    let headers = new Headers();
+          let headers = new Headers({ 'Content-Type': 'application/json',
+                                           'Accept': 'q=0.8;application/json;q=0.9' });
+          let options = new RequestOptions({ headers: headers });
+
+          this.http.delete("http://localhost:8001/events?name="+ this.old, options)
+          .subscribe(data => {
+            console.log(data['_body']);
+          }, error => {
+            console.log(error);
+          });
+
+    
+
+    headers = new Headers();
     headers.append("Accept", 'application/json');
     headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({ headers: headers });
+    options = new RequestOptions({ headers: headers });
 
 
     function find_site(cadena){
@@ -63,8 +86,6 @@ export class EventModalPage {
       }
 
     }
-
-
 
     let postParams = {
 
