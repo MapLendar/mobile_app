@@ -93,6 +93,39 @@ export class CalendarHomePage {
     this.viewTitle = title;
   }
 
+  delete_event(event){
+
+    let alert = this.alertCtrl.create({
+      title: 'Delete' + event.title + '?',
+
+      buttons: [{
+        text: 'Yes, delete event!',
+        handler: () => {
+
+          var index = this.eventSource.indexOf(event);
+          let partialsource = this.eventSource;
+          this.eventSource = [];
+          
+          if (index > -1) {
+            partialsource.splice(index, 1);
+            setTimeout(() => {
+              this.eventSource = partialsource;
+            });
+            console.log("Después", this.eventSource);
+          }
+        }
+      },
+      {
+        text: 'Cancel',
+        handler: () => {
+          console.log('ok');
+        }
+      }]
+    })
+    alert.present();
+
+  }
+
   onEventSelected(event) {
 
     let start = moment(event.startTime).format('LLLL');
@@ -103,7 +136,19 @@ export class CalendarHomePage {
     let alert = this.alertCtrl.create({
       title: '' + event.title,
       subTitle: '<b>From: </b>' + start + '<b><br>To:</b> ' + end +  '<b><br>Where: </b>' + place ,
-      buttons: ['OK']
+      buttons: [{
+        text: 'Delete event',
+        handler: () => {
+          console.log("antes  "+ this.eventSource);
+          this.delete_event(event);
+        }
+      },
+      {
+        text: 'OK',
+        handler: () => {
+          console.log('ok');
+        }
+      }]
     })
     alert.present();
   }

@@ -79,6 +79,7 @@ export class EventModalPage {
     }, error => {
       console.log(error);
     });
+    
     this.viewCtrl.dismiss(this.event);
   }
 
