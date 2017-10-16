@@ -79,7 +79,7 @@ export class EventModalPage {
     }
 
     console.log("site_id", postParams.site_id),
-    this.http.post("http://localhost:8001/events", postParams, options)
+    this.http.post("http://192.168.99.100:3008/events", postParams, options)
     .subscribe(data => {
       console.log(data['_body']);
     }, error => {
