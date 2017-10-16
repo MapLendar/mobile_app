@@ -16,9 +16,10 @@ export class CalendarHomePage {
   viewTitle: string;
   selectedDay = new Date();
   selectedSite: string;
+  newtoken: any  =  "";
 
-  user: Observable<any>;
-  events: Observable<any>;
+  user: any;
+  events: any;
 
   calendar = {
     mode: 'month',
@@ -26,10 +27,45 @@ export class CalendarHomePage {
   };
 
   constructor(public navCtrl: NavController, private modalCtrl: ModalController, private alertCtrl: AlertController, public authProvider: AuthProvider) {
-        this.user = this.authProvider.getUserInf();
-        this.user.map(res => res.json()).subscribe(data => {
-          console.log('my data: ', data);
-        });
+        /*this.Authorize();
+
+        this.user = this.authProvider.getUserInf().then(data => {
+              this.newtoken = data;
+              this.authProvider.refreshToken(this.newtoken.newtoken);
+              return true;
+            }).catch((err) => {
+              console.log("Not authorized")
+              return false;
+             });
+
+        let owner_id = this.user.id;
+        this.events = this.authProvider.getUserEvents(owner_id).then(data => {
+              this.newtoken = data;
+              this.authProvider.refreshToken(this.newtoken.newtoken);
+              return true;
+            }).catch((err) => {
+              console.log("Not authorized")
+              return false;
+             });
+        for(let ev of this.events){
+          this.eventSource.push(ev);
+        }
+
+        */
+   }
+
+   Authorize(){
+         this.authProvider.private().then(data => {
+           console.log("data authorizw: ", data);
+           this.newtoken = data;
+           console.log("login successful");
+           console.log("token: ", this.newtoken.newtoken);
+           this.authProvider.refreshToken(this.newtoken.newtoken);
+           return true;
+           }).catch((err) => {
+             console.log("Not authorized")
+             return false;
+           });
    }
 
   addEvent() {
@@ -57,7 +93,7 @@ export class CalendarHomePage {
     this.viewTitle = title;
   }
 
-  onEventSelected(event, films) {
+  onEventSelected(event) {
 
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');

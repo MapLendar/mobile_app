@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers} from '@angular/http';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Component } from '@angular/core';
+//import { IonicPage, NavController, NavParams } from 'ionic-angular';
+//import { Component } from '@angular/core';
 import { Storage } from "@ionic/storage";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -17,7 +17,6 @@ import 'rxjs/add/operator/toPromise';
 export class AuthProvider {
 
   getusertoken: Observable<any>;
-  user_inf: Observable<any>;
   baseUrl:string = 'http://localhost:3000/authenticate/'
   base2Url:string = 'http://localhost:3000/authorize/'
   base3Url:string = 'http://localhost:3000/users/'
@@ -29,8 +28,27 @@ export class AuthProvider {
   }
 
   getUserInf(){
-    return this.http.get('http://localhost:3000/user_inf').map(res => res.json());
+
+    let headers = new Headers();
+    let jwt = this.getTokenStorage();
+    return this.createAuthorizationHeader(headers).then(() =>{
+      console.log("Entrando a hacer el get en user");
+      return this.http.get('http://localhost:3000/user_inf', {headers: headers, params: jwt })
+      .map(res => res.json()).toPromise();
+    });
   }
+
+  getUserEvents(owner_id){
+
+    let headers = new Headers();
+    //let jwt = this.getTokenStorage();
+    return this.createAuthorizationHeader(headers).then(() =>{
+      console.log("Entrando a hacer el get en user");
+      return this.http.get('http://localhost:3001/my_events', {headers: headers, params: owner_id })
+      .map(res => res.json()).toPromise();
+    });
+  }
+
 
   getTokenStorage(){
     return this.storage.get('jwtoken').then(val => {
