@@ -60,14 +60,15 @@ export class EditPage{
                                            'Accept': 'q=0.8;application/json;q=0.9' });
           let options = new RequestOptions({ headers: headers });
 
-          this.http.delete("http://localhost:8001/events?name="+ this.old, options)
+          //this.http.delete("http://localhost:8001/events?name="+ this.old, options)
+          this.http.delete("http://192.168.99.100:3008/events?name="+ this.old, options)
           .subscribe(data => {
             console.log(data['_body']);
           }, error => {
             console.log(error);
           });
 
-    
+
 
     headers = new Headers();
     headers.append("Accept", 'application/json');
@@ -100,7 +101,8 @@ export class EditPage{
     }
 
     console.log("site_id", postParams.site_id),
-    this.http.post("http://localhost:8001/events", postParams, options)
+    this.http.post("http://192.168.99.100:3008/events", postParams, options)  
+    //this.http.post("http://localhost:8001/events", postParams, options)
     .subscribe(data => {
       console.log(data['_body']);
     }, error => {

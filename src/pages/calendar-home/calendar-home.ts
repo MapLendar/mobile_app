@@ -153,6 +153,7 @@ export class CalendarHomePage {
                                          'Accept': 'q=0.8;application/json;q=0.9' });
         let options = new RequestOptions({ headers: headers });
 
+        //this.http.delete("http://localhost:8001/events?name="+ event.title, options)
         this.http.delete("http://192.168.99.100:3008/events?name="+ event.title, options)
         .subscribe(data => {
           console.log(data['_body']);
@@ -193,6 +194,7 @@ export class CalendarHomePage {
                                      'Accept': 'q=0.8;application/json;q=0.9' });
     let options = new RequestOptions({ headers: headers });
 
+    //this.http.delete("http://localhost:8001/events?name="+ event.title, options)
     this.http.delete("http://192.168.99.100:3008/events?name="+ event.title, options)
     .subscribe(data => {
       console.log(data['_body']);

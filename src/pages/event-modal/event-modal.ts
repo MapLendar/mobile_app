@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ViewController} from 'ionic-angular';
+import { IonicPage, NavController, NavParams,ViewController, AlertController} from 'ionic-angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { Http, RequestOptions, Headers } from '@angular/http';
@@ -23,7 +23,7 @@ export class EventModalPage {
   minDate = new Date().toISOString();
   old: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public http: Http) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public http: Http, public alertCtrl: AlertController) {
 
     let preselectedDate = moment(this.navParams.get('selectedDay')).format();
     let preselectedPlace = this.navParams.get('selectedSite')
@@ -79,12 +79,19 @@ export class EventModalPage {
     }
 
     console.log("site_id", postParams.site_id),
+    //this.http.post("http://localhost:8001/events", postParams, options)
     this.http.post("http://192.168.99.100:3008/events", postParams, options)
     .subscribe(data => {
       console.log(data['_body']);
     }, error => {
       console.log(error);
     });
+
+    let alert = this.alertCtrl.create({
+      title: "Event created!",
+      buttons:['OK']
+    });
+    alert.present();
 
     this.viewCtrl.dismiss(this.event);
   }
